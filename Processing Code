@@ -1,0 +1,95 @@
+import netP5.*;
+import oscP5.*;
+
+OscP5 readData;
+int readPort = 8000;
+
+float tcpPositionX;
+float tcpPositionY;
+float tcpPositionZ;
+
+float tcpRotationX;
+float tcpRotationY;
+float tcpRotationZ;
+
+float tcpSpeedX;
+float tcpSpeedY;
+float tcpSpeedZ;
+
+float tcpSpeedRotX;
+float tcpSpeedRotY;
+float tcpSpeedRotZ;
+
+String messageAddress = "/robotData";
+
+void setup() 
+{
+  size(600, 600);
+  readData = new OscP5(this, readPort);
+  
+}
+
+
+
+
+void draw()
+{
+background(0);
+
+float a = map(tcpPositionY,-150,300,0,width);
+float b = map(tcpPositionZ,500,1000,0,height);
+float c = map(a,0,width,240,380);
+float d = map(b,0,height,220,380);
+fill(255);
+noStroke();
+ellipse(width/2, height/2, 150,150);
+fill(0);
+noStroke();
+ellipse(c,d,25,50);
+
+//if(tcpPositionY-height/2<=0)
+//{
+//  fill(0);
+//}
+//else
+//{
+// fill(255,0,0); 
+//}
+
+fill(255);
+noStroke();
+ellipse(a,b,8,8);
+
+
+//ellipse(tcpRotationX/4, tcpRotationY/4, tcpRotationZ/4, tcpRotationZ/4);
+//fill(50,70,86);
+//ellipse(300 + tcpRotationY*2, 300 + tcpRotationY*2, tcpRotationX/6, tcpRotationX/6);
+
+
+  
+println(tcpPositionX);
+}
+
+
+void oscEvent(OscMessage theOscMessage) 
+{
+  if (theOscMessage.checkAddrPattern(messageAddress) == true) 
+  {
+      tcpPositionX = theOscMessage.get(0).floatValue();
+      tcpPositionY = theOscMessage.get(1).floatValue();
+      tcpPositionZ = theOscMessage.get(2).floatValue();
+
+      tcpRotationX = theOscMessage.get(3).floatValue();
+      tcpRotationY = theOscMessage.get(4).floatValue();
+      tcpRotationZ = theOscMessage.get(5).floatValue();
+
+      tcpSpeedX = theOscMessage.get(6).floatValue();
+      tcpSpeedY = theOscMessage.get(7).floatValue();
+      tcpSpeedZ = theOscMessage.get(8).floatValue();
+
+      tcpSpeedRotX = theOscMessage.get(9).floatValue();
+      tcpSpeedRotY = theOscMessage.get(10).floatValue();
+      tcpSpeedRotZ = theOscMessage.get(11).floatValue();
+    
+  }
+}
